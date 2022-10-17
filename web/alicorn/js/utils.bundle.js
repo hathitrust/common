@@ -19362,6 +19362,85 @@ head.ready(function () {
 });
 "use strict";
 
+var isEnabled = true;
+var profiles = {
+  'www.hathitrust.org': {
+    'ga4': 'G-88Z3DQ18W5',
+    'matomo': '1'
+  },
+  'catalog.hathitrust.org': {
+    'ga4': 'G-SRTQWPMGW8',
+    'matomo': '2'
+  }
+};
+
+var add_ga4 = function add_ga4(profileId) {
+  // < !--Google tag(gtag.js)-- >
+  // <script async src="https://www.googletagmanager.com/gtag/js?id=G-SRTQWPMGW8"></script>
+  // <script>
+  //   window.dataLayer = window.dataLayer || [];
+  //   function gtag(){dataLayer.push(arguments);}
+  //   gtag('js', new Date());
+  //   gtag('config', 'G-SRTQWPMGW8');
+  // </script>
+  head.js("https://www.googletagmanager.com/gtag/js?id=".concat(profileId), function () {
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', profileId);
+  });
+};
+
+var add_matomo = function add_matomo(profileId) {
+  var _paq = window._paq = window._paq || [];
+
+  _paq.push(['trackPageView']);
+
+  _paq.push(['enableLinkTracking']);
+
+  (function () {
+    var u = "//testing.matomo.hathitrust.org/";
+
+    _paq.push(['setTrackerUrl', u + 'matomo.php']);
+
+    _paq.push(['setSiteId', profileId]);
+
+    var d = document,
+        g = d.createElement('script'),
+        s = d.getElementsByTagName('script')[0];
+    g.async = true;
+    g.src = u + 'matomo.js';
+    s.parentNode.insertBefore(g, s);
+  })();
+};
+
+head.ready(function () {
+  var hostname = location.hostname;
+  var profileId;
+
+  if (!isEnabled) {
+    return;
+  }
+
+  var config;
+
+  if (hostname.indexOf('catalog.hathitrust.org') > 1) {
+    config = profiles['catalog.hathitrust.org'];
+  } else if (hostname.indexOf('www.hathitrust.org') > -1) {
+    config = profiles['www.hathitrust.org'];
+  } else {
+    return;
+  }
+
+  add_ga4(config.ga4);
+  add_matomo(config.matomo);
+});
+"use strict";
+
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 (function (global, factory) {

@@ -43,14 +43,20 @@ const openNotifications = function() {
     })
   }
 
-  // dialogEl.dataset.right = ( $action.position().left - $action.width() / 2 ) - dialogEl.offsetWidth;
-  let rightX = (window.outerWidth - $action.position().left - ($action.width()) + ($action.width() / 2));
-  rightX -= (2 * 16); // padding
-  rightX -= (150 / 2);
+  // why is this modal calculated by the right?
+  let modalEl = dialogEl.querySelector('[aria-modal]');
+  let leftX = $action.position().left - $(modalEl).width() + 150;
+  let rightX = window.innerWidth - (leftX + $(modalEl).width());
+  rightX += ( 2 * 16 ); // padding
+  if (rightX < 0) {
+    rightX = 0;
+  }
+  if (window.innerWidth - (rightX + $(modalEl).width() ) < 0 ) {
+    rightX = 0;
+  }
   dialogEl.style.setProperty('--right-x', rightX);
 
   $action.get(0).dataset.active = 'true';
-  // dialog.show();
   bootbox.show('notifications-modal', {
     onClose: function (modal) {
       docCookies.setItem('HT.notice', notificationData[0].effective_on, null, '/', '.hathitrust.org', true);
@@ -66,7 +72,7 @@ head.ready(function () {
   if ( ! $action.get(0) ){ return; }
 
   $("html").on('ht:login', function(event) {
-    console.log("AHOY WE ARE LOGGED IN");
+    // console.log("AHOY WE ARE LOGGED IN");
 
     notificationData = HT.login_status.notificationData;
     if (notificationData == null || notificationData.length == 0) { return; }
@@ -77,7 +83,7 @@ head.ready(function () {
     let lastNotificationTimestamp = docCookies.getItem('HT.notice');
     // let lastNotificationTimestamp = localStorage.getItem('ht.notification');
 
-    console.log("-- notification timestamp", notificationTimestamp, lastNotificationTimestamp, lastNotificationTimestamp != notificationTimestamp);
+    // console.log("-- notification timestamp", notificationTimestamp, lastNotificationTimestamp, lastNotificationTimestamp != notificationTimestamp);
     if ( lastNotificationTimestamp != notificationTimestamp ) {
       // automatically open if there are unseen notifications
       openNotifications();

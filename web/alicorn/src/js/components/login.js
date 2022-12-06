@@ -211,7 +211,7 @@ head.ready(function() {
         create_login_panel({ $trigger: $button });
         $button.on('click', function(e) {
             // if ( $("html").is(".mobile") ) { return ; }
-            if ( $(window).width() < 640 ) { return ; }
+            if ( $(window).width() < 700 ) { return ; }
             e.preventDefault();
             console.log("AHOY LOGIN CLICK", $button.data('active'), e);
             if ( $button.data('active') ) {
@@ -279,17 +279,19 @@ head.ready(function() {
         var top = $block.css('position') == 'fixed' ? $trigger.position().top : $trigger.offset().top;
         top = $trigger.position().top;
         top += $trigger.outerHeight() + ( 100 / 2 ); // 32;
-        // top = 6.25 * 16;
-        // var right = $(window).width() - ( $button.offset().left + $button.outerWidth() );
-        // var right = $(window).width() - ( $trigger.offset().left + ( $trigger.outerWidth() / 2 ) ) - ( 25 + 10 );
-        var right = (window.outerWidth - $trigger.position().left - ($trigger.outerWidth()) + ($trigger.outerWidth() / 2));
-        right -= (2 * 16); // padding
-        right -= (150 / 2);
 
-        console.log("AHOY SETTING POSITION", top, "x", right);
-        $dialog.css({ top: top, right: right });
+        var left = $trigger.position().left - $dialog.width() + 150;
+        // console.log("-- positioning", left, "<-", $trigger.position().left, $block.width(), "/", left, $dialog.get(0).getBoundingClientRect());
+        var right = window.innerWidth - ( left + $dialog.width() );
+        if (right < 0) {
+            left += right;
+        }
+
+        $dialog.css({ top: top, left: left });
+
         var $caret = $dialog.find(".login-panel-arrow");
         $caret.css({ right: 25 });
+
 
         if ( $button.is(".button") ) {
             $button.addClass("active");

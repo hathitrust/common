@@ -21397,7 +21397,7 @@ head.ready(function () {
     });
     $button.on('click', function (e) {
       // if ( $("html").is(".mobile") ) { return ; }
-      if ($(window).width() < 640) {
+      if ($(window).width() < 700) {
         return;
       }
 
@@ -21482,18 +21482,18 @@ head.ready(function () {
     var top = $block.css('position') == 'fixed' ? $trigger.position().top : $trigger.offset().top;
     top = $trigger.position().top;
     top += $trigger.outerHeight() + 100 / 2; // 32;
-    // top = 6.25 * 16;
-    // var right = $(window).width() - ( $button.offset().left + $button.outerWidth() );
-    // var right = $(window).width() - ( $trigger.offset().left + ( $trigger.outerWidth() / 2 ) ) - ( 25 + 10 );
 
-    var right = window.outerWidth - $trigger.position().left - $trigger.outerWidth() + $trigger.outerWidth() / 2;
-    right -= 2 * 16; // padding
+    var left = $trigger.position().left - $dialog.width() + 150; // console.log("-- positioning", left, "<-", $trigger.position().left, $block.width(), "/", left, $dialog.get(0).getBoundingClientRect());
 
-    right -= 150 / 2;
-    console.log("AHOY SETTING POSITION", top, "x", right);
+    var right = window.innerWidth - (left + $dialog.width());
+
+    if (right < 0) {
+      left += right;
+    }
+
     $dialog.css({
       top: top,
-      right: right
+      left: left
     });
     var $caret = $dialog.find(".login-panel-arrow");
     $caret.css({
@@ -21902,16 +21902,24 @@ var openNotifications = function openNotifications() {
       var notice_html = "<div>\n        <dt>".concat(datum.title, "</dt>\n        <dd>\n          ").concat(message, "\n        </dd>\n      </div>");
       $(notice_html).appendTo(dialogEl.querySelector('dl'));
     });
-  } // dialogEl.dataset.right = ( $action.position().left - $action.width() / 2 ) - dialogEl.offsetWidth;
+  } // why is this modal calculated by the right?
 
 
-  var rightX = window.outerWidth - $action.position().left - $action.width() + $action.width() / 2;
-  rightX -= 2 * 16; // padding
+  var modalEl = dialogEl.querySelector('[aria-modal]');
+  var leftX = $action.position().left - $(modalEl).width() + 150;
+  var rightX = window.innerWidth - (leftX + $(modalEl).width());
+  rightX += 2 * 16; // padding
 
-  rightX -= 150 / 2;
+  if (rightX < 0) {
+    rightX = 0;
+  }
+
+  if (window.innerWidth - (rightX + $(modalEl).width()) < 0) {
+    rightX = 0;
+  }
+
   dialogEl.style.setProperty('--right-x', rightX);
-  $action.get(0).dataset.active = 'true'; // dialog.show();
-
+  $action.get(0).dataset.active = 'true';
   bootbox.show('notifications-modal', {
     onClose: function onClose(modal) {
       docCookies.setItem('HT.notice', notificationData[0].effective_on, null, '/', '.hathitrust.org', true); // localStorage.setItem('ht.notification', notificationData[0].effective_on);
@@ -21927,7 +21935,7 @@ head.ready(function () {
   }
 
   $("html").on('ht:login', function (event) {
-    console.log("AHOY WE ARE LOGGED IN");
+    // console.log("AHOY WE ARE LOGGED IN");
     notificationData = HT.login_status.notificationData;
 
     if (notificationData == null || notificationData.length == 0) {
@@ -21937,8 +21945,7 @@ head.ready(function () {
     $action.prop('disabled', false);
     var notificationTimestamp = notificationData[0].effective_on;
     var lastNotificationTimestamp = docCookies.getItem('HT.notice'); // let lastNotificationTimestamp = localStorage.getItem('ht.notification');
-
-    console.log("-- notification timestamp", notificationTimestamp, lastNotificationTimestamp, lastNotificationTimestamp != notificationTimestamp);
+    // console.log("-- notification timestamp", notificationTimestamp, lastNotificationTimestamp, lastNotificationTimestamp != notificationTimestamp);
 
     if (lastNotificationTimestamp != notificationTimestamp) {
       // automatically open if there are unseen notifications

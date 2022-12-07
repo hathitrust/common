@@ -22,7 +22,7 @@ input[type=checkbox] + label:before {
   width: 1em;
   height: 1em;
   margin-left: -1.5em;
-  margin-top: .15em;
+  margin-top: .25em; /* was: 0.15em */
   vertical-align: top;
   cursor: pointer;
   text-align: center;

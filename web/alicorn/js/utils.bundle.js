@@ -20729,6 +20729,9 @@ head.ready(function () {
             $.post(get_feedback_url(), data, function () {
               $dialog.closeModal();
               bootbox.alert("<p>Thank you for your feedback!</p>");
+            }).fail(function () {
+              $dialog.closeModal();
+              bootbox.alert("<p>There was an issue submitting this feedback.</p>");
             });
           } else {
             // have to post the form

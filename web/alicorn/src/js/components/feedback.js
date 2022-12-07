@@ -29,15 +29,17 @@ head.ready(function() {
     var html =
     '<form class="form-horizontal">' +
       '<div class="control-group">' +
-        '<label class="control-label" for="email">Email Address<br /><span class="label">Optional</span></label>' +
+        '<label class="control-label" for="email">Email Address</label>' +
         '<div class="controls">' +
-          '<input id="email" name="email" type="text" class="input-xlarge" placeholder="[Your email address]" />' +
+          '<input id="email" name="email" type="text" class="input-xlarge" placeholder="[Your email address]" required="required" />' +
+          '<span class="required"><i class="icomoon icomoon-info-circle" aria-hidden="true"></i> This field is required.</span>' + 
         '</div>' +
       '</div>' +
       '<div class="control-group">' +
         '<label class="control-label" for="comments">Comments</label>' +
         '<div class="controls">' +
           '<textarea rows="5" id="comments" name="comments" required="required" class="input-xlarge" placeholder="Add your feedback here"></textarea>' +
+          '<span class="required"><i class="icomoon icomoon-info-circle" aria-hidden="true"></i> This field is required.</span>' + 
         '</div>' +
       '</div>' +
     '</form>';

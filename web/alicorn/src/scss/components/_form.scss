@@ -188,6 +188,16 @@ label {
     background-color: #666666;
 }
 
+.required {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  padding: 0.125rem 0.25rem;
+  font-size: 0.9rem;
+  color: #727272;
+  margin-top: 0.25rem;
+}
+
 .form-horizontal .controls {
     margin-left: 180px;
 }

@@ -1,5 +1,5 @@
 var HT = HT || {};
-HT.analytics = {};
+HT.analytics = HT.analytics || {};
 HT.analytics.enabled = false;
 // HT.analytics.trackPageview = function(href) { /* no op */ };
 HT.analytics.trackEvent = function(params) { /* no op */ };

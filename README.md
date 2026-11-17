@@ -1,5 +1,8 @@
 ## About common
 
+_Deprecation Note: this repository is unmaintained. Its resources have been moved elsewhere
+in the HathiTrust ecosystem, or retired._
+
 `common` is a repository of cross-application resources:
 
 * `robots.txt`
